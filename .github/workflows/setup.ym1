@@ -1,0 +1,35 @@
+name: Setup mGBA celio Black Web
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-site:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download mGBA celio Web
+        run: |
+          git clone --depth 1 --branch gh-pages https://github.com/liru55/mgba-celio-web.git upstream
+          mkdir site
+          cp -a upstream/. site/
+          rm -rf site/.git
+
+      - name: Apply black skin
+        run: |
+          cp styles.css site/styles.css
+          sed -i "s/mgba-celio-web-v17/mgba-celio-web-v17-black-v2/" site/sw.js
+
+      - name: Publish
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+          publish_branch: gh-pages
+          force_orphan: true
