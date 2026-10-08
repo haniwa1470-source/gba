@@ -1,0 +1,393 @@
+
+/*
+  mGBA celio Web — Black Minimal Drop-in Skin v2
+  For liru55/mgba-celio-web gh-pages branch.
+  Replace ONLY styles.css with this file.
+*/
+
+*{box-sizing:border-box}
+:root{
+  --bg:#000;
+  --panel:#090909;
+  --panel2:#111;
+  --line:#262626;
+  --text:#ededed;
+  --muted:#8c8c8c;
+  --pressed:#2d2d2d;
+}
+html,body{margin:0;background:#000;color:var(--text);font:15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{
+  min-height:100dvh;
+  padding:max(6px,env(safe-area-inset-top))
+          max(8px,env(safe-area-inset-right))
+          max(8px,env(safe-area-inset-bottom))
+          max(8px,env(safe-area-inset-left));
+  overflow-x:hidden;
+}
+main{position:relative;width:100%;max-width:520px;margin:0 auto}
+button,summary,select,input,textarea{font:inherit}
+button,summary{
+  color:#c8c8c8;background:#101010;border:1px solid #292929;
+  border-radius:12px;padding:11px;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+button:disabled{opacity:.38}
+button:active,.pressed{background:var(--pressed)!important}
+[hidden]{display:none!important}
+
+/* Hide the original chrome. The useful settings dialog remains. */
+header,#status,.notice,#link-open,main>.help-link{display:none!important}
+
+/* ---------- GAME AREA ---------- */
+.play{
+  position:relative;
+  overflow:visible;
+  background:#000;
+  display:flex;
+  flex-direction:column;
+}
+canvas{
+  display:block;width:100%;height:auto;aspect-ratio:3/2;
+  image-rendering:pixelated;background:#000;border-radius:3px;
+}
+#screen{
+  order:1;
+  width:100%!important;
+  height:auto!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  transform:scale(var(--screen-scale,1));
+  transform-origin:center;
+  box-shadow:0 0 0 1px #151515,0 10px 30px #000;
+}
+#effect-screen{
+  position:absolute;top:0;left:0;pointer-events:none;margin:0;z-index:1;
+  transform-origin:center;
+}
+#effect-screen[hidden]{display:none!important}
+
+/* Welcome */
+#welcome{
+  position:absolute;inset:0 0 auto 0;z-index:12;
+  aspect-ratio:3/2;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;gap:9px;background:#000;border-radius:0;
+}
+#welcome strong{font-size:18px}
+#welcome p{margin:0;color:#888;font-size:13px}
+#welcome small{font-size:11px;color:#666;line-height:1.55}
+#welcome button{
+  border-radius:999px;background:#111;border-color:#333;padding:11px 24px;
+}
+.has-rom #welcome{display:none}
+.play:not(.has-rom) .gamepad{visibility:hidden}
+
+/* ---------- SAVE / LOAD ---------- */
+#quick-actions{
+  order:2;
+  position:relative!important;
+  top:auto!important;left:auto!important;right:auto!important;
+  transform:none!important;
+  width:calc(100% - 112px);
+  max-width:none;
+  margin:12px 104px 0 8px;
+  padding:0;
+  display:flex!important;
+  justify-content:flex-end;
+  gap:8px;
+  z-index:8;
+  white-space:nowrap;
+}
+.quick-action{
+  position:static!important;left:auto!important;top:auto!important;
+  transform:none!important;
+  flex:1 1 0;max-width:108px;
+}
+#quick-action-speed{display:none!important}
+#quick-actions button{
+  width:100%;min-height:36px;padding:7px 8px;
+  border-radius:999px;border:1px solid #292929;
+  background:#101010;color:#c8c8c8;
+  box-shadow:inset 0 1px 0 #202020,0 4px 10px #000;
+  font-size:0!important;opacity:1!important;
+  touch-action:manipulation;
+}
+#quick-state-save::after{
+  content:"SAVE";font-size:10px;font-weight:750;letter-spacing:.11em;
+}
+#quick-state-load::after{
+  content:"LOAD";font-size:10px;font-weight:750;letter-spacing:.11em;
+}
+
+/* Re-use the EXISTING settings button as MENU.
+   No JS modification is needed. */
+.toolbar{
+  position:absolute;
+  z-index:20;
+  top:calc(66.666vw - 1px);
+  right:8px;
+  display:block;
+  margin:0;padding:0;
+  pointer-events:none;
+}
+.toolbar button{display:none!important}
+.toolbar #settings-open{
+  display:block!important;
+  pointer-events:auto;
+  width:88px;height:36px;padding:7px 8px;
+  border-radius:999px;background:#101010;border:1px solid #292929;
+  box-shadow:inset 0 1px 0 #202020,0 4px 10px #000;
+  font-size:0!important;color:#c8c8c8;
+}
+.toolbar #settings-open::after{
+  content:"MENU";font-size:10px;font-weight:750;letter-spacing:.11em;
+}
+/* iPhone portrait target; cap position when the page reaches its 520px max width. */
+@media(min-width:536px){
+  .toolbar{top:347px}
+}
+
+/* ---------- PHYSICAL-CONTROLLER-LIKE TOUCH PAD ---------- */
+.gamepad{
+  order:3;
+  position:relative!important;inset:auto!important;
+  width:100%!important;height:auto!important;max-width:none!important;
+  margin:0!important;padding:15px 6px 4px!important;
+  pointer-events:auto!important;
+}
+.primary{
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+  gap:22px;min-height:178px;padding:0 8px;
+}
+.shoulders,.dpad,.ab,.system{
+  position:static!important;left:auto!important;top:auto!important;
+  transform:none!important;opacity:1!important;pointer-events:auto!important;
+  margin:0!important;
+}
+.gamepad button{
+  touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
+  color:#aaa;background:#101010;border:1px solid #292929;
+  box-shadow:inset 0 1px 0 #202020,0 4px 10px #000;
+}
+.gamepad button.pressed{background:#2d2d2d!important}
+
+/* L/R */
+.shoulders{
+  width:100%!important;display:flex!important;justify-content:space-between!important;
+  padding:0 2px 10px!important;
+}
+.shoulders button{
+  width:84px!important;height:42px!important;border-radius:17px 17px 11px 11px!important;
+  padding:0!important;font-size:13px;font-weight:750;letter-spacing:.08em;
+}
+
+/* D-pad */
+.dpad{
+  position:relative!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,52px)!important;
+  grid-template-rows:repeat(3,52px)!important;
+  gap:0!important;width:156px;height:156px;isolation:isolate;
+}
+.up{grid-area:1/2}.left{grid-area:2/1}.right{grid-area:2/3}.down{grid-area:3/2}
+.dpad button{padding:0!important;font-size:19px;border-radius:2px}
+.dpad.linked::before{
+  content:"";position:absolute;inset:0;background:#111;
+  clip-path:polygon(33.33% 0,66.67% 0,66.67% 33.33%,100% 33.33%,100% 66.67%,66.67% 66.67%,66.67% 100%,33.33% 100%,33.33% 66.67%,0 66.67%,0 33.33%,33.33% 33.33%);
+  box-shadow:inset 0 0 0 1px #242424,0 6px 15px #000;
+  z-index:-1;
+}
+.dpad.linked button{border:0;background:transparent!important;border-radius:0}
+.dpad.linked button.pressed{background:#2d2d2d!important}
+
+/* A/B */
+.ab{
+  display:flex!important;align-items:center!important;gap:15px!important;
+  transform:rotate(-10deg)!important;
+}
+.ab button{
+  width:68px!important;height:68px!important;border-radius:50%!important;
+  padding:0!important;font-size:20px!important;font-weight:800!important;
+}
+.ab button:last-child{
+  transform:translateY(-18px)!important;background:#111!important;
+}
+
+/* Select/Start */
+.system{
+  display:flex!important;justify-content:center!important;gap:14px!important;
+  margin-top:-4px!important;padding-bottom:5px!important;
+}
+.system button{
+  min-width:84px!important;height:32px!important;padding:4px 14px!important;
+  border-radius:999px!important;font-size:10px!important;letter-spacing:.06em;
+}
+
+#quick-message{
+  position:fixed!important;left:50%!important;right:auto!important;
+  bottom:max(18px,env(safe-area-inset-bottom))!important;
+  transform:translateX(-50%)!important;z-index:40;
+  margin:0;padding:8px 12px;width:max-content;max-width:calc(100vw - 24px);
+  border:1px solid #292929;border-radius:999px;background:#111f;
+  color:#ddd;text-align:center;font-size:12px;pointer-events:none;
+}
+
+/* ---------- PAUSE / LINK HUD ---------- */
+#pause-banner{
+  position:absolute;left:50%;top:33vw;transform:translate(-50%,-50%);
+  z-index:15;width:210px;max-width:calc(100% - 30px);
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  background:#0b0b0bf2;border:1px solid #303030;box-shadow:0 8px 30px #000;
+}
+#pause-banner strong{font-size:18px}
+#pause-banner span{font-size:12px;color:#999}
+#link-hud{
+  position:absolute;top:8px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:5px;z-index:18;white-space:nowrap;
+  max-width:calc(100% - 12px);background:#080808e8;border:1px solid #222;
+  border-radius:999px;padding:4px;
+}
+#link-hud span{font-size:11px;padding:4px}
+#link-hud button{font-size:11px;padding:6px 9px;min-height:36px}
+#link-hud button[aria-pressed=true]{background:#2a2a2a}
+
+/* ---------- SETTINGS / MENU ---------- */
+dialog{
+  border:1px solid #252525;border-radius:20px;background:#080808;color:#eee;
+  width:min(94vw,540px);max-height:88dvh;padding:18px;overflow:auto;
+  box-shadow:0 20px 80px #000;
+}
+dialog::backdrop{background:#000c;backdrop-filter:blur(5px)}
+.dialog-head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  position:sticky;top:-18px;padding:10px 0;background:#080808;z-index:2;
+}
+.dialog-head h2{font-size:19px;margin:0}
+.tabs{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:5px;margin:14px 0;
+}
+.tabs button{
+  padding:10px 3px;border-color:#222;background:#0e0e0e;font-size:12px;
+}
+.tabs [aria-selected=true]{background:#252525;border-color:#404040}
+dialog h3{font-size:15px;margin:18px 0 10px}
+dialog p,dialog li{color:#aaa;font-size:13px;line-height:1.7}
+dialog small{display:block;color:#8f8f8f;font-size:12px;line-height:1.6}
+dialog .wide{width:100%;margin:6px 0;min-width:0;min-height:44px}
+.secondary{background:transparent!important}
+.row{display:flex;gap:10px;align-items:center;padding:11px 0;font-size:14px}
+.row input{width:20px;height:20px}
+.field{display:grid;grid-template-columns:1fr auto;gap:9px;margin:15px 0;font-size:14px}
+.field select,.field input,.field textarea{
+  grid-column:1/-1;width:100%;min-height:38px;background:#111!important;
+  color:#ddd!important;border:1px solid #2c2c2c;border-radius:9px;padding:9px;
+}
+textarea{resize:vertical;font:14px monospace}
+.field output{color:#bbb}
+.mapping-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mapping-grid label{display:grid;gap:5px;font-size:13px}
+.mapping-grid select{min-width:0;width:100%;background:#111;color:#ddd;border:1px solid #2c2c2c;border-radius:8px;padding:9px}
+dialog hr{border:0;border-top:1px solid #222;margin:20px 0}
+dialog details{margin:0 0 14px}
+dialog details summary{background:transparent;text-align:left;padding:11px 0}
+#save-name{padding:10px;background:#101010;border-radius:8px;overflow-wrap:anywhere}
+.help-link{
+  display:block;padding:13px;margin:4px 0 12px;text-align:center;
+  color:#bbb;background:#101010;border:1px solid #292929;border-radius:12px;
+  text-decoration:none;font-size:13px;
+}
+.link-buttons{display:flex;gap:8px}.link-buttons button{flex:1;min-height:44px}
+.badge{font-size:11px;color:#aaa;border:1px solid #333;border-radius:20px;padding:5px 8px}
+select{color-scheme:dark}
+
+/* Keep settings' layout editor usable, but it does not alter the console-like portrait layout. */
+#edit-bar{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:8px;font-size:12px;color:#ddd;background:#111;border-radius:10px;
+}
+.play #edit-bar{
+  position:absolute;bottom:max(8px,env(safe-area-inset-bottom));left:50%;
+  transform:translateX(-50%);z-index:30;width:max-content;max-width:calc(100% - 16px);
+}
+#fullscreen-layout{display:none!important}
+
+/* ---------- FULLSCREEN / LANDSCAPE ---------- */
+.play:fullscreen,.play.immersive,.expanded .play{
+  position:fixed!important;inset:0!important;z-index:60!important;
+  width:100%!important;height:100dvh!important;background:#000!important;
+  display:block!important;padding:0!important;
+}
+.play:fullscreen #screen,.play.immersive #screen,.expanded .play #screen{
+  width:100%!important;height:100%!important;aspect-ratio:auto!important;
+  object-fit:contain!important;border-radius:0!important;
+}
+.play.immersive .gamepad,.expanded .play .gamepad{
+  position:absolute!important;inset:0!important;height:100%!important;padding:0!important;
+  pointer-events:none!important;
+}
+.play.immersive .dpad,.play.immersive .ab,.play.immersive .shoulders,.play.immersive .system,
+.expanded .play .dpad,.expanded .play .ab,.expanded .play .shoulders,.expanded .play .system{
+  position:absolute!important;pointer-events:auto!important;
+  opacity:var(--pad-opacity,.55)!important;
+}
+.play.immersive .shoulders,.expanded .play .shoulders{
+  left:50%!important;top:14%!important;width:84%!important;
+  transform:translate(-50%,-50%) scale(var(--pad-scale,.75))!important;
+}
+.play.immersive .dpad,.expanded .play .dpad{
+  left:13%!important;top:68%!important;
+  transform:translate(-50%,-50%) scale(var(--pad-scale,.75))!important;
+}
+.play.immersive .ab,.expanded .play .ab{
+  left:87%!important;top:68%!important;
+  transform:translate(-50%,-50%) rotate(-10deg) scale(var(--pad-scale,.75))!important;
+}
+.play.immersive .system,.expanded .play .system{
+  left:50%!important;top:90%!important;
+  transform:translate(-50%,-50%) scale(var(--pad-scale,.75))!important;
+}
+.play.immersive #quick-actions,.expanded .play #quick-actions{
+  position:absolute!important;top:max(10px,env(safe-area-inset-top))!important;
+  left:50%!important;right:auto!important;width:230px!important;
+  margin:0!important;transform:translateX(-50%)!important;z-index:70!important;
+}
+.play.immersive~.toolbar,.expanded .toolbar{display:none!important}
+#fullscreen-exit{
+  position:absolute;z-index:80;top:max(10px,env(safe-area-inset-top));
+  left:max(10px,env(safe-area-inset-left));min-height:40px;padding:8px 11px;
+  opacity:.6;background:#0b0b0bcc;border-color:#333;font-size:11px;
+}
+.clean-view header,.clean-view #status,.clean-view .toolbar,.clean-view .notice,
+.clean-view .gamepad,.clean-view #fullscreen-exit,.clean-view #edit-bar,
+.clean-view #quick-actions,.clean-view #quick-message{visibility:hidden!important}
+
+@media(max-width:390px){
+  .dpad{
+    grid-template-columns:repeat(3,48px)!important;
+    grid-template-rows:repeat(3,48px)!important;width:144px;height:144px;
+  }
+  .ab button{width:62px!important;height:62px!important}
+  .primary{gap:12px;padding:0 2px}
+  #quick-actions{width:calc(100% - 106px);margin-right:98px}
+  .toolbar #settings-open{width:82px}
+}
+@media(orientation:landscape) and (max-height:550px){
+  body{padding:0}
+  main{max-width:none}
+  .play{height:100dvh}
+  #screen{height:100dvh!important;width:100%!important;aspect-ratio:auto!important;object-fit:contain!important}
+  #quick-actions{
+    position:absolute!important;top:max(8px,env(safe-area-inset-top))!important;
+    left:50%!important;right:auto!important;width:210px!important;
+    margin:0!important;transform:translateX(-50%)!important;z-index:25!important;
+  }
+  .toolbar{top:max(8px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));z-index:26}
+  .gamepad{position:absolute!important;inset:0!important;height:100%!important;padding:0!important;pointer-events:none!important}
+  .dpad,.ab,.shoulders,.system{position:absolute!important;pointer-events:auto!important;opacity:.55!important}
+  .shoulders{left:50%!important;top:14%!important;width:82%!important;transform:translate(-50%,-50%) scale(.72)!important}
+  .dpad{left:12%!important;top:68%!important;transform:translate(-50%,-50%) scale(.72)!important}
+  .ab{left:88%!important;top:68%!important;transform:translate(-50%,-50%) rotate(-10deg) scale(.72)!important}
+  .system{left:50%!important;top:90%!important;transform:translate(-50%,-50%) scale(.72)!important}
+  dialog{max-height:94dvh}
+}
